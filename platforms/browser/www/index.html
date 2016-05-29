@@ -1,0 +1,214 @@
+<html>
+<head>
+  <title>Loading</title>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+
+  <style>
+  #workingSpace{
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 0;
+    padding:0 0 0 0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background: #e0f3fa;
+    background: -moz-linear-gradient(top,  #e0f3fa 0%, #d8f0fc 50%, #b8e2f6 51%, #b6dffd 100%);
+    background: -webkit-linear-gradient(top,  #e0f3fa 0%,#d8f0fc 50%,#b8e2f6 51%,#b6dffd 100%);
+    background: linear-gradient(to bottom,  #e0f3fa 0%,#d8f0fc 50%,#b8e2f6 51%,#b6dffd 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0f3fa', endColorstr='#b6dffd',GradientType=0 );
+
+  }
+  #logoContainer{
+    width: 350px;
+    height: 350px;
+    animation: pulse 1.5s ease-in-out infinite;
+
+  }
+  @keyframes pulse{
+    0%{
+      transform: scale(1,1);
+    }
+    50%{
+      transform: scale(1.02, 1.02);
+    }
+    100%{
+      transform: scale(1,1);
+    }
+  }
+  @keyframes growAndFade{
+    0%{
+      opacity: 1;
+      transform: scale(1,1);
+    }
+    100%{
+      opacity: 0;
+      transform: scale(1.25,1.25);
+    }
+  }
+  #text{
+    text-align: center;
+    color: white;
+    text-transform: uppercase;
+    font-size: 3em;
+  }
+  .progress{
+    height: 25px;
+  }
+  #logoImg{
+    max-width:100%;
+    max-height:100%;
+  }
+  </style>
+</head>
+
+
+<body>
+<div id="workingSpace">
+  <div>
+    <div id="logoContainer">
+      <img id="logoImg" src="https://upload.wikimedia.org/wikipedia/commons/6/6f/HP_logo_630x630.png">
+    </div><br>
+  <div id="text">
+    <h1>Loading...</h1>
+  </div><br>
+  <div id="loadingBar">
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" aria-valuenow="30"
+      aria-valuemin="0" aria-valuemax="100" style="width:0%;" id="pgbr">
+      </div>
+    </div>
+  </div>
+
+  </div>
+</div>
+
+<div class="modal fade in" role="dialog" id="error_modal" data-backdrop="static">
+   <div class="modal-dialog">
+      <div class="modal-content md-content">
+         <div class='modal-header'>
+            <h4 class='modal-title' id='error_title'>I am in the header</h4>
+         </div>
+         <div class='modal-body'>
+            <p id='error_text'>I am text</p>
+         </div>
+         <div class='modal-footer'>
+            <button class='btn btn-default' id='error_btn1'></button>
+            <button class='btn btn-default' id='error_btn2'></button>
+         </div>
+      </div>
+   </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.2.3.min.js"
+  integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+    crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/cordova.js"></script>
+<script>
+
+if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+  document.addEventListener("deviceready", onDeviceReady, false);
+} else {
+  onDeviceReady(); //this is the browser
+}
+
+  function onDeviceReady() {
+
+  }
+
+
+  function drawErrorModal(title, msg, btn1, btn2){
+     $("#error_title").html(title);
+     $("#error_text").html(msg);
+
+     switch(btn1){
+        case 0:
+        case null:
+        case false:
+           $("#error_btn1").hide();
+           break;
+        case "Ok":
+           $("#error_btn1").show().html(btn1).click(
+              function(){
+                 $(".modal-backdrop").remove();
+                 $("#error_modal").modal("toggle");
+              }
+           );
+           break;
+        case "Cancel":
+           $("#error_btn1").show().html(btn1).click(
+              function(){
+                 alert("attempting to cancel");
+              }
+           )
+        default:
+     }
+
+     switch(btn2){
+        case 0:
+        case null:
+        case false:
+           $("#error_btn2").hide();
+           break;
+        case "Ok":
+           $("#error_btn2").show().html(btn2).click(
+              function(){
+                 $(".modal-backdrop").remove();
+                 $("#error_modal").modal("toggle");
+              }
+           );
+           break;
+        case "Cancel":
+           $("#error_btn2").show().html(btn2).click(
+              function(){
+                 alert("attempting to cancel");
+              }
+           )
+        default:
+     }
+     console.log('im here');
+     console.log(document.getElementById('error_modal'));
+     $("#error_modal").modal("show");
+  }
+  var percentageAmt = 0;
+
+  var interval = window.setInterval(function(){
+    if(percentageAmt < 100){
+      percentageAmt++;
+      percentageAmt++;
+      percentageAmt++;
+      percentageAmt++;
+      $("#pgbr").attr("aria-valuenow", parseInt(percentageAmt));
+      $("#pgbr").css('width', parseInt(percentageAmt) + "%");
+    }else{
+      finishedLoading();
+    }
+  }, 100);
+
+  function finishedLoading(){
+    window.clearInterval(interval);
+    window.setTimeout(proceed, 600);
+
+    $("#logoContainer").animate({
+      opacity: 0
+    }, 600);
+    $("#loadingBar").animate({
+      opacity: 0
+    }, 600);
+    $("#text").animate({
+      opacity: 0
+    }, 600);
+    $("#workingSpace").animate({
+      opacity: 0
+    }, 600);
+
+    console.log(document.getElementById(("logoContainer")));
+  }
+  function proceed(){
+      window.location.href = 'login.html';
+  }
+</script>
+</body>
+</html>

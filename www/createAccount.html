@@ -1,0 +1,136 @@
+<html>
+<head>
+<title>Loading</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body>
+
+  <div data-role="page" data-theme="c" id="index">
+
+  	<div data-role="header" data-theme="c">
+  		<h1>Login to Hydrogen</h1>
+  	</div><!-- /header -->
+
+  	<div data-role="content" data-theme="c" id="index-content">
+        <h1>Login</h1>
+        <span>Username / Email:</span><input type="text" name="username_input" id="username_input" value=""  />
+        <span>Password:</span><input type="text" name="pw_input" id="password_input" value=""  />
+        <button type="button" class="btn btn-default" onclick="validateFields()">Login</button>
+
+    </div>
+
+  	<div data-role="footer" data-position="fixed" data-theme="c">
+  		<h4 onclick="phoneGapLink('newAccount.html')">Click here to create an account.</h4>
+  	</div><!-- /footer -->
+
+  </div><!-- /page -->
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-2.2.3.min.js"
+  integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+    crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/cordova.js"></script>
+<script type="text/javascript" src="js/bark.js"></script>
+<script>
+
+if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+  document.addEventListener("deviceready", onDeviceReady, false);
+} else {
+  onDeviceReady(); //this is the browser
+}
+
+  function onDeviceReady() {
+  }
+
+
+  function drawErrorModal(title, msg, btn1, btn2){
+     $("#error_title").html(title);
+     $("#error_text").html(msg);
+
+     switch(btn1){
+        case 0:
+        case null:
+        case false:
+           $("#error_btn1").hide();
+           break;
+        case "Ok":
+           $("#error_btn1").show().html(btn1).click(
+              function(){
+                 $(".modal-backdrop").remove();
+                 $("#error_modal").modal("toggle");
+              }
+           );
+           break;
+        case "Cancel":
+           $("#error_btn1").show().html(btn1).click(
+              function(){
+                 alert("attempting to cancel");
+              }
+           )
+        default:
+     }
+
+     switch(btn2){
+        case 0:
+        case null:
+        case false:
+           $("#error_btn2").hide();
+           break;
+        case "Ok":
+           $("#error_btn2").show().html(btn2).click(
+              function(){
+                 $(".modal-backdrop").remove();
+                 $("#error_modal").modal("toggle");
+              }
+           );
+           break;
+        case "Cancel":
+           $("#error_btn2").show().html(btn2).click(
+              function(){
+                 alert("attempting to cancel");
+              }
+           )
+        default:
+     }
+     console.log('im here');
+     console.log(document.getElementById('error_modal'));
+     $("#error_modal").modal("show");
+  }
+
+  function validateFields(){
+    var un = document.getElementById('username_input').value;
+    var pw = document.getElementById('password_input').value;
+    console.log(un);
+    console.log(pw);
+    //TODO: Check if both fields are in there.
+    if( ( un == "" || un == null || un == 0 ) || ( pw == "" || pw == null || pw == 0 ) ){
+      drawErrorModal("Login Error", "Please make sure both fields are filled out and try again.", "Ok", "Cancel");
+    }
+    //TODO: Check if first field is username or email.
+    if(un.indexOf("@") != -1 && un.indexOf(".") != -1){
+      alert("username is an email");
+    }else{
+      alert("username is username");
+    }
+    //if Username check if username and password match
+
+    //Else if email, check if email and password match
+
+
+  }
+
+  function proceed(){
+      window.location.href = 'main.html';
+  }
+
+  function phoneGapLink(locationString){
+    window.location.href = locationString;
+  }
+</script>
+</body>
+</html>
